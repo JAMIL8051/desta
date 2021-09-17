@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+<head>
+	<script src="static/lib/jquery-2.1.1.min.js"></script>
+	<script src="static/lib/react-with-addons.js"></script>
+	<script src="static/lib/d3.v3.js"></script>
+	<script src="static/lib/JSXTransformer.js"></script>
+
+	<title>Test</title>
+</head>
+<body style="height: 100%">
+
+	<table class="dataTable">
+		<tbody>
+		<tr><td>Name</td>	 <td><input type="text" id="Tup1" size="5", value=""></td></tr>
+		<tr><td>Email</td>	 <td><input type="text" id="Tup2" size="5", value=""></td></tr>
+		<tr><td>Intersts</td><td><input type="text" id="Tup3" size="5", value=""></td></tr>
+		<tr><td>Phone</td>	 <td><input type="text" id="Tup4" size="5", value=""></td></tr>
+		<tr><td><button id="send" style="background-color: #00FFFF;">Send</button></td></tr>
+		</tbody>
+	</table>
+
+	<script>
+		function send(event){
+			var self = this;
+		
+			var prices = '' + document.getElementById("Tup1").value
+						+ '=' + document.getElementById("Tup2").value
+						+ '=' + document.getElementById("Tup3").value
+						+ '=' + document.getElementById("Tup4").value;
+		
+			$.getJSON('api/addUser/' + prices)
+			.then(function(diff) {
+				alert(diff);
+			});
+		}
+
+		document.getElementById("send").onclick = this.send;
+		alert("CC");
+	</script>
+
+	<div>
+		Version 0.1
+	</div>
+</body>
+</html>
