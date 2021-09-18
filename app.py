@@ -51,7 +51,7 @@ def addUser(userInfo):
     print(userInfo)
     name, email, interests, phone = userInfo.split('=')
     interests = interests.split(',')
-    if store_user_database(name, email, phone, interest):
+    if store_user_database(name, email, phone, interests):
         return "200"
     return "500"
 
