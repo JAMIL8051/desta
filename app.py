@@ -18,33 +18,49 @@ app = Flask(__name__)
 #logging.getLogger('matplotlib.font_manager').disabled = True
 # cors = CORS(app, allow_headers='Content-Type')
 
-#code shared by Jamil (untested)
-def store_user_database(name, email, phone, interest):
+def store_user_info_to_database(name, email, phone, interest):
+    user_interest = ""
+    
+    try:
+        no_of_intersts = len(interest)
+        if  no_of_intersts == 1:
+            user_interest = interest[0]
+        elif no_of_intersts > 1:
+            for val in interest:
+                user_interest = user_interest + str(val) + ","
+        elif no_of_intersts == 0:
+            user_interest = user_interest
+        
+        user_interest = user_interest[:-1] # We are avoiding the last comma
 
-    connection = pymysql.connect(host='localhost', user='root', password='admin', db='user_info')
+    except Exception as e:
+        print(e)
+        sys.exit(1)
 
-    with connection:
-        with connection.cursor() as cursor:
-            # Create new records
-            sql = "INSERT INTO "
-            cursor.execute(sql, (str(i+1), temp_movie_genre_id[i], genre_id[i]))
+    connection = pymysql.connect(host='localhost', user='root', password='Codetogive2021!', db='user_info')
+    cursor = connection.cursor() 
+    # Create new records
+    sql = f"INSERT INTO USER VALUES ({name},{email},{user_interest},{phone})"
+    cursor.execute(sql)
+    # connection is not autocommit by default. So you must commit to save our changes.
+    connection.commit()
+    cursor.close()
+    connection.close()
 
-        # connection is not autocommit by default. So you must commit to save our changes.
-        connection.commit()
-    return True #False if an issue occured however commit() does not seem to return anything
+    return None
 
-def send_results_to_user(user_interest):
-    connection = pymysql.connect(host='localhost', user='root', password='admin', db='business_owner_info')
 
-    with connection:
-        with connection.cursor() as cursor:
-            sql = """
-            SELECT business_name, business_type, email 
-            FROM busines_owner_info bo 
-            WHERE bo.business_type = {user_interest}""".format(user_interest = user_interest)
-        iterator = cursor.execute(sql)
+def send_results_to_user(user_interest, email):
+    sql = f"SELECT name, email FROM BUSINESS_OWNER bo WHERE bo.business_type = {user_interest}"
+
+    connection = pymysql.connect(host='localhost', user='root', password='Codetogive2021!', db='user_info')
+    cursor = connection.cursor() 
+    iterator = cursor.execute(sql)
+    connection.commit()
+    cursor.close()
+    connection.close()
+    
     return list(iterator)
-
 @app.route("/api/addUser/<string:userInfo>")
 def addUser(userInfo):
     """Get user info as name=email=interests=phone with intersts a comma seperated list"""
@@ -54,7 +70,15 @@ def addUser(userInfo):
     if store_user_database(name, email, phone, interests):
         return "200"
     return "500"
-
+@app.route("/api/addUser/<string:businessInfo>")
+def addUser(businessInfo):
+    """Get business owner info as name=email=interests=address=phone with intersts a comma seperated list"""
+    print(businessInfo)
+    name, email, interests, address, phone = businessInfo.split('=')
+    interests = interests.split(',')
+    if store_information.store_business_owner_info_to_database(name, email, address, phone, interests):
+        return "200"
+    return "500"
 @app.route("/api/getInterests<string:intersts>")
 def getInterests(interests):
     interests = interests.split(',')
