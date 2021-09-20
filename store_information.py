@@ -27,7 +27,7 @@ def store_user_info_to_database(name, email, phone, interest):
     connection = pymysql.connect(host='localhost', user='root', password='Codetogive2021!', db='user_info')
     cursor = connection.cursor() 
     # Create new records
-    sql = f"INSERT INTO USER VALUES ({name},{email},{phone},{user_interest})"
+    sql = f"INSERT INTO USER VALUES ({name},{email},{user_interest}, {phone})"
     cursor.execute(sql)
 
     # connection is not autocommit by default. So you must commit to save our changes.
