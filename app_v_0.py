@@ -47,7 +47,7 @@ def store_user_info_to_database(name, email, phone, interest):
 
 
 def send_results_to_user(user_interest, email):
-    sql = f"SELECT name, email FROM BUSINESS_OWNER bo WHERE bo.business_type = {user_interest}"
+    sql = f"SELECT NAME, E_MAIL, INSTRAGRAM_ACCOUNT FROM BUSINESS_OWNER bo WHERE bo.MAIN_ACTIVITY = {user_interest.upper()}"
 
     connection = pymysql.connect(host='localhost', user='root', password='Codetogive2021!', db='user_info')
     cursor = connection.cursor() 
