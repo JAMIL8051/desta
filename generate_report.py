@@ -23,7 +23,7 @@ def send_email(results, email, sender = "admin_desta_team6@protonmail.com"):
     email_message = email_message + "<table border ='1'>"
     
     for i in range(len(results)):
-        email_message = email_message + "<tr><th>{t1}</th><th>{t2}</th></tr>".format(t1=results[i][0], t2 = results[i][1])
+        email_message = email_message + "<tr><th>{t1}</th><th>{t2}</th>{t3}</tr>".format(t1=results[i][0], t2 = results[i][1], t3 = results[i][5])
     
     email_content = email_header + email_message + email_tail
 
